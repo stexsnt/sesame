@@ -2,7 +2,7 @@
 // et que les sorties attendues (predire / ordre) sont exactes.
 const fs = require("fs"), path = require("path");
 const src = f => fs.readFileSync(path.join(__dirname, "..", "js", f), "utf8");
-const { PARCOURS, DEFIS, PY_HARNESS, memesSorties } = new Function(src("contenu.js") + src("moteur.js") + "; return {PARCOURS, DEFIS, PY_HARNESS, memesSorties};")();
+const { PARCOURS, DEFIS, PY_HARNESS, memesSorties } = new Function(src("contenu.js") + src("dossiers-anciens.js") + src("dossiers-modernes.js") + src("moteur.js") + "; return {PARCOURS, DEFIS, PY_HARNESS, memesSorties};")();
 
 (async () => {
   const { loadPyodide } = require("pyodide");

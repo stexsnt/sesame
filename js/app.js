@@ -673,6 +673,7 @@ function route() {
   if (m[0] === "c" && chapParId(m[1])) vueChapitre(chapParId(m[1]), m[2]);
   else if (m[0] === "problemes") vueProblemes();
   else if (m[0] === "p" && DEFIS.etapes[+m[1]]) vueProbleme(+m[1]);
+  else if (m[0] === "atelier") vueAtelier();
   else if (m[0] === "profil") vueProfil();
   else if (m[0] === "lexique") vueLexique();
   else if (m[0] === "fiches") vueFiches(m[1] === "libre");

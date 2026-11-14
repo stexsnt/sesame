@@ -69,7 +69,7 @@ function etapeReponse(z, c, i, e) {
     if (e.mot) {
       const v = nettoyer(champ.value).replace(/[^A-Z]/g, "");
       if (!v) { retour.textContent = "Écris ta réponse en lettres."; return; }
-      juste = v === e.mot;
+      juste = [].concat(e.mot).includes(v);
     } else {
       const v = lireNombre(champ.value);
       if (Number.isNaN(v)) { retour.textContent = "Écris un nombre entier."; return; }
@@ -148,11 +148,12 @@ function manipBrute(z, ok) {
 }
 
 const FREQ_FR = [["E", 14.7], ["S", 7.9], ["A", 7.6], ["I", 7.5], ["T", 7.2], ["N", 7.1], ["R", 6.6], ["U", 6.3]];
-function manipFrequences(z, ok) {
-  const chiffre = substituer(MESSAGE_FREQ), vrai = c => ALPHABET[ALPHA_MELANGE.indexOf(c)];
+function manipFrequences(z, ok, cfg = { message: MESSAGE_FREQ, glyphes: ALPHA_MELANGE, connus: "" }) {
+  /* cfg.glyphes : les 26 signes qui remplacent A, B, C… ; cfg.connus : lettres claires données d'avance. */
+  const G = [...cfg.glyphes], signe = c => G[c.charCodeAt(0) - 65], vrai = g => ALPHABET[G.indexOf(g)], estLettre = c => c >= "A" && c <= "Z";
   const compte = {}; let total = 0;
-  for (const c of chiffre) if (c >= "A" && c <= "Z") { compte[c] = (compte[c] || 0) + 1; total++; }
-  const lettres = Object.keys(compte).sort((a, b) => compte[b] - compte[a] || a.localeCompare(b));
+  for (const c of cfg.message) if (estLettre(c)) { compte[signe(c)] = (compte[signe(c)] || 0) + 1; total++; }
+  const lettres = Object.keys(compte).sort((a, b) => compte[b] - compte[a] || G.indexOf(a) - G.indexOf(b));
   const choix = {}, donnees = new Set(); let aides = 0, fini = false;
   const barres = (liste, max) => liste.map(([l, p]) => `<li><b>${l}</b><span class="c-barre"><i style="width:${100 * p / max}%"></i></span><span class="pc">${fr(p, 1)} %</span></li>`).join("");
   const duMessage = lettres.slice(0, 8).map(l => [l, 100 * compte[l] / total]);
@@ -161,7 +162,7 @@ function manipFrequences(z, ok) {
       <div><h3>Dans ce message</h3><ol class="barres chiffrees">${barres(duMessage, 20)}</ol></div>
       <div><h3>En français</h3><ol class="barres claires">${barres(FREQ_FR, 20)}</ol></div>
     </div>
-    <div class="freq-texte" aria-label="Message chiffré, avec tes propositions au-dessus de chaque lettre">${chiffre.split(" ").map(mot => `<span class="mot-c">${[...mot].map(c => c >= "A" && c <= "Z" ? `<span class="fl" data-c="${c}"><b></b><i>${c}</i></span>` : `<span class="fl ponct"><b>${c}</b><i></i></span>`).join("")}</span>`).join(" ")}</div>
+    <div class="freq-texte" aria-label="Message chiffré, avec tes propositions au-dessus de chaque lettre">${cfg.message.split(" ").map(mot => `<span class="mot-c">${[...mot].map(c => estLettre(c) ? `<span class="fl" data-c="${signe(c)}"><b></b><i>${signe(c)}</i></span>` : `<span class="fl ponct"><b>${c}</b><i></i></span>`).join("")}</span>`).join(" ")}</div>
     <h3>Tes propositions</h3>
     <div class="freq-cles">${lettres.map(c => `<label class="fq"><span class="fq-c">${c}</span><input maxlength="1" data-c="${c}" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Lettre claire proposée pour ${c}, présente ${compte[c]} fois"><span class="fq-n">${compte[c]}</span></label>`).join("")}</div>
     <p class="freq-etat" aria-live="polite"></p>
@@ -177,11 +178,9 @@ function manipFrequences(z, ok) {
   $$(".fq input", z).forEach(inp => inp.oninput = () => {
     inp.value = nettoyer(inp.value).replace(/[^A-Z]/g, "").slice(-1); choix[inp.dataset.c] = inp.value; maj();
   });
-  $("#fq-aide", z).onclick = () => {
-    const c = lettres.find(x => choix[x] !== vrai(x)); if (!c) return;
-    aides++; choix[c] = vrai(c); donnees.add(c);
-    const inp = $(`.fq input[data-c="${c}"]`, z); inp.value = vrai(c); inp.readOnly = true; inp.parentNode.classList.add("donnee"); maj();
-  };
+  const donner = c => { choix[c] = vrai(c); donnees.add(c); const inp = $(`.fq input[data-c="${c}"]`, z); inp.value = vrai(c); inp.readOnly = true; inp.parentNode.classList.add("donnee"); };
+  $("#fq-aide", z).onclick = () => { const c = lettres.find(x => choix[x] !== vrai(x)); if (!c) return; aides++; donner(c); maj(); };
+  [...(cfg.connus || "")].forEach(l => { if (compte[signe(l)]) donner(signe(l)); });
   maj();
 }
 
@@ -352,7 +351,7 @@ function frise() {
   const partie = c => PARCOURS.find(p => p.chapitres.includes(c)).id;
   const pts = [...ESCALES().map(c => ({ an: c.an, date: c.date, nom: c.court || c.titre, c })), ...A_VENIR].sort((a, b) => a.an - b.an);
   const PAS = 68, X0 = 56, W = X0 * 2 + PAS * (pts.length - 1), Y = 96;
-  return `<div class="chrono-defile" tabindex="0" role="group" aria-label="Frise chronologique des dossiers, de Sparte au quantique"><svg class="chrono" viewBox="0 0 ${W} 192" style="min-width:${W}px">
+  return `<div class="chrono-defile" tabindex="0" role="group" aria-label="Frise chronologique des dix-sept dossiers, de Sparte au quantique"><svg class="chrono" viewBox="0 0 ${W} 192" style="min-width:${W}px">
     <path d="M${X0 - 34} ${Y}H${W - X0 + 34}" class="axe"/><path d="M${W - X0 + 34} ${Y}l-9-5v10z" class="pointe"/>
     ${pts.map((p, k) => {
       const x = X0 + k * PAS, haut = k % 2 === 0, mots = p.nom.split(" "), lignes = [""], an = Math.floor(p.an);
@@ -374,9 +373,9 @@ function vueAccueil() {
   <section class="hero">
     <div class="hero-texte">
       <h1>Chiffre un message. Puis casse-le.</h1>
-      <p>${nb === 3 ? "Trois dossiers pour commencer" : `${nb} dossiers`}, de Jules César aux clés publiques. Dans chacun, tu chiffres avec la technique de l'époque, puis tu la casses comme elle a été cassée.</p>
+      <p>Dix-sept dossiers, de la lanière de Sparte à l'ordinateur quantique. Dans chacun, tu chiffres avec la technique de l'époque, puis tu la casses comme elle a été cassée.</p>
       <div class="hero-actions">
-      <a class="btn gros" href="${lien}">${!suite ? "Voir mon profil" : commence ? `Reprendre : ${h(suite.titre)}` : "Ouvrir le premier dossier"}</a><a class="btn gros secondaire" href="#/problemes">Décrypter un message</a></div>
+      <a class="btn gros" href="${lien}">${!suite ? "Voir mon profil" : commence ? `Reprendre : ${h(suite.titre)}` : "Ouvrir le premier dossier"}</a><a class="btn gros secondaire" href="#/problemes">Décrypter un message</a><a class="btn gros secondaire" href="#/atelier">Aller à l'atelier</a></div>
     </div>
     <div class="hero-machine">
       <label for="h-msg">Ton message</label><input id="h-msg" class="saisie" type="text" maxlength="28" value="SESAME OUVRE TOI" autocomplete="off" spellcheck="false" autocapitalize="characters">
@@ -388,9 +387,9 @@ function vueAccueil() {
   <div class="ruban-pi" aria-hidden="true"><div><span>${RUBAN} · </span><span>${RUBAN} · </span></div></div>
   <section class="route" aria-labelledby="t-route">
     <h2 id="t-route">Vingt-cinq siècles de secrets</h2>
-    <p class="route-intro">Chaque chiffre a tenu jusqu'à ce que quelqu'un trouve la faille, et chaque faille a fait naître un chiffre plus solide. Les dossiers ouverts sont en couleur.</p>
+    <p class="route-intro">Chaque chiffre a tenu jusqu'à ce que quelqu'un trouve la faille, et chaque faille a fait naître un chiffre plus solide. Entre par le dossier qui t'intrigue, ou suis-les dans l'ordre.</p>
     ${frise()}
-    <p class="chrono-legende"><span class="ouvert">Dossier ouvert</span><span class="avenir">À venir</span></p>
+    ${A_VENIR.length ? `<p class="chrono-legende"><span class="ouvert">Dossier ouvert</span><span class="avenir">À venir</span></p>` : ""}
   </section>
   <section aria-labelledby="t-escales">
     <h2 id="t-escales" class="sr">Les dossiers</h2>

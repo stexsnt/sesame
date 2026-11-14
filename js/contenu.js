@@ -12,10 +12,10 @@
      qcm     : { t, titre?, q, doc? (HTML), choix:[...], bon, expl, retours?:[...] }
      tri     : { t, titre, q, categories:[...], items:[{ txt, cat, expl }] }
      ordre   : { t, titre?, q, lignes:[...dans le bon ordre], texte?: true, expl? }
-     quiz    : { t, titre, intro?, doc?, widget?: "roue" | "enigma" | "mot" | "couleurs" | "echange", questions:[{ q, choix, bon, expl }] }
+     quiz    : { t, titre, intro?, doc?, widget? (nom d'une manipulation de sesame.js ou machines.js), questions:[{ q, choix, bon, expl }] }
      code    : { t, titre, enonce, depart, solution, d, tests, caches?, indices, requis?, interdit? }
      pari    : { t, titre, q, choix:[...] }   (l'élève s'engage ; aucune correction à ce moment-là)
-     manip   : { t, titre, intro (HTML), widget: "brute" | "frequences" | "logarithme", expl, verdict?: [une phrase par choix du pari] }
+     manip   : { t, titre, intro (HTML), widget (nom d'une manipulation), expl, verdict?: [une phrase par choix du pari] }
 
    Ajoutez les nouvelles étapes À LA FIN d'un dossier : la progression est enregistrée par position.
    ============================================================ */
@@ -296,23 +296,8 @@ for a in range(1, 12):
   ]
 }];
 
-/* Frise de l'accueil : les dossiers à venir. Quand un dossier est écrit, on retire sa ligne d'ici. */
-const A_VENIR = [
-  { an: -400, date: "vers 400 av. J.-C.", nom: "La scytale de Sparte" },
-  { an: 1586, date: "1586", nom: "Marie Stuart trahie par son chiffre" },
-  { an: 1586.5, date: "1586", nom: "Vigenère, le chiffre indéchiffrable" },
-  { an: 1863, date: "1863", nom: "Babbage et Kasiski" },
-  { an: 1883, date: "1883", nom: "Le principe de Kerckhoffs" },
-  { an: 1917, date: "1917", nom: "Le télégramme Zimmermann" },
-  { an: 1917.5, date: "1917", nom: "Le masque jetable" },
-  { an: 1942, date: "1942", nom: "Le code navajo" },
-  { an: 1977, date: "1977", nom: "RSA" },
-  { an: 1984, date: "1984", nom: "La clé quantique" },
-  { an: 1991, date: "années 1990", nom: "Hachage et signatures" },
-  { an: 1994, date: "1994", nom: "L'algorithme de Shor" },
-  { an: 1995, date: "1995", nom: "Le cadenas du navigateur" },
-  { an: 2024, date: "2024", nom: "Après le quantique" },
-];
+/* Frise de l'accueil : les dossiers annoncés mais pas encore écrits, sous la forme { an, date, nom }. Vide aujourd'hui. */
+const A_VENIR = [];
 
 /* ============================================================
    MESSAGES INTERCEPTÉS — des cryptogrammes à casser, sans leçon.
