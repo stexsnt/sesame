@@ -5,7 +5,7 @@
    À l'installation, seuls les fichiers absents du cache sont téléchargés : une mise à jour du site
    ne recharge pas Pyodide. Si Pyodide est mis à jour, changer le nom du cache ci-dessous. */
 const CACHE = "sesame-v2";
-const BASE = ["./", "index.html", "prof.html", "css/style.css", "js/contenu.js", "js/dossiers-anciens.js", "js/dossiers-modernes.js", "js/machines.js", "js/lexique.js", "js/moteur.js", "js/bilan.js", "js/app.js", "js/sesame.js", "js/prof.js", "js/confort.js", "manifest.webmanifest", "icones/icone-192.png", "icones/icone-512.png",
+const BASE = ["./", "index.html", "prof.html", "css/style.css", "js/contenu.js", "js/dossiers-anciens.js", "js/dossiers-modernes.js", "js/machines.js", "js/lexique.js", "js/moteur.js", "js/bilan.js", "js/app.js", "js/sesame.js", "js/prof.js", "js/confort.js", "js/prof-plus.js", "js/qrcode.min.js", "manifest.webmanifest", "icones/icone-192.png", "icones/icone-512.png",
   "polices/zilla-slab-latin-500-normal.woff2", "polices/zilla-slab-latin-700-normal.woff2", "polices/ibm-plex-sans-latin-400-normal.woff2", "polices/ibm-plex-sans-latin-400-italic.woff2", "polices/ibm-plex-sans-latin-700-normal.woff2", "polices/ibm-plex-mono-latin-400-normal.woff2", "polices/ibm-plex-mono-latin-700-normal.woff2",
   "pyodide/pyodide.mjs", "pyodide/pyodide.asm.mjs", "pyodide/pyodide.asm.wasm", "pyodide/python_stdlib.zip", "pyodide/pyodide-lock.json"];
 self.addEventListener("install", e => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c => Promise.all(BASE.map(u => c.match(u).then(h => h || c.add(u).catch(() => {}))))).catch(() => {})); });
