@@ -17,7 +17,10 @@
      pari    : { t, titre, q, choix:[...] }   (l'élève s'engage ; aucune correction à ce moment-là)
      manip   : { t, titre, intro (HTML), widget (nom d'une manipulation), expl, verdict?: [une phrase par choix du pari] }
 
-   Ajoutez les nouvelles étapes À LA FIN d'un dossier : la progression est enregistrée par position.
+   Où ajouter une étape : à la fin d'un dossier, sans rien de plus. Pour l'insérer AU MILIEU, lui donner
+   « numero: n », où n est le premier numéro libre (le nombre d'étapes du dossier avant l'ajout,
+   si aucune n'a encore de numéro). Les autres étapes gardent ainsi leur numéro et la progression des
+   élèves n'est pas décalée. Ne jamais supprimer ni réutiliser un numéro ; tests/verifier.js le contrôle.
    ============================================================ */
 
 /* ----- Outils de chiffrement utilisés pour fabriquer les énoncés ----- */
@@ -304,7 +307,7 @@ const A_VENIR = [];
    Champs communs : titre, ep (identifiant de partie, pour l'ambiance), date, origine, d (difficulté 1 à 3), accroche.
      reponse : { t, enonce (HTML), reponse (nombre) ou mot (texte attendu, comparé sans accents ni espaces), indices:[...], expl, histoire? }
      code    : comme dans les dossiers.
-   Ajoutez les nouveaux messages À LA FIN.
+   Ajoutez les nouveaux messages à la fin, ou au milieu avec « numero: n » (même règle que pour les étapes).
    ============================================================ */
 const DEFIS = { id: "defis", titre: "Messages interceptés", resume: "", etapes: [
   { t: "reponse", titre: "Trois mots de César", ep: "sub", date: "47 av. J.-C.", origine: "Asie Mineure", d: 1,
