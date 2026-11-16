@@ -1209,3 +1209,7 @@ dialog.projection form { margin-top: 1.2rem; }
 :root:not([data-theme="clair"]) .ep-mac, :root:not([data-theme="clair"]) body[data-epoque="mac"] { --e: #F2A47C; }
 :root:not([data-theme="clair"]) .ep-pub, :root:not([data-theme="clair"]) body[data-epoque="pub"] { --e: #8AD0C8; }
 :root:not([data-theme="clair"]) .ep-dem, :root:not([data-theme="clair"]) body[data-epoque="dem"] { --e: #C2BCF4; }
+
+/* ----- Graphiques matplotlib affichés dans la console ----- */
+.cons img.figure { display: block; max-width: 100%; height: auto; margin: .6rem 0; background: #fff; border-radius: 10px; border: 1px solid var(--trait); }
+#etat-python[data-etat="paquets"]::before { background: var(--soleil); }
