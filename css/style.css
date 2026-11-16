@@ -1167,3 +1167,10 @@ nav.principal a { white-space: nowrap; }
 .atelier aside.contexte { max-width: 46rem; }
 @media (max-width: 760px) { .at-ligne { grid-template-columns: 1fr; } .cad-ligne { grid-template-columns: 1fr; } .cad-fleche::after, .cad-fleche::before { display: none; } }
 @media (max-width: 760px) { nav.principal a { padding: .5rem .35rem; font-size: .84rem; } nav.principal a[data-nb]:not([data-nb=""])::after { margin-left: .2em; } }
+
+/* ----- Confort : rappel de sauvegarde et état de Python (js/confort.js) ----- */
+.rappel-sauv { position: fixed; z-index: 40; left: 1rem; bottom: 5.5rem; right: 1rem; max-width: 27rem; padding: 1rem 1.2rem; border: 1px solid var(--trait); border-left: 5px solid var(--soleil); border-radius: 14px; background: var(--carte); color: var(--encre); box-shadow: 0 10px 30px rgba(0, 0, 0, .22); display: grid; gap: .7rem; animation: pose .3s; }
+.rappel-sauv p { margin: 0; }
+.rappel-sauv .actions { margin: 0; display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+#etat-python .reessayer { min-height: 0; padding: 0 .2rem; font-size: inherit; }
+@media (min-width: 761px) { .rappel-sauv { bottom: 1rem; left: auto; } }

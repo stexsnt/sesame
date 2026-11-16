@@ -35,3 +35,11 @@ GitHub Pages sert la branche `gh-pages`. Après une modification de `main` : `gi
 ## Polices
 
 Zilla Slab, IBM Plex Sans et IBM Plex Mono, sous licence SIL Open Font License, hébergées dans `polices/`.
+
+## Confort d'usage
+
+- `js/confort.js` (identique sur Mue, Synapse, Périple et Sésame) : message plus clair pendant le chargement de Python,
+  bouton « Réessayer » en cas d'échec, et rappel de sauvegarde quand huit étapes ont été validées depuis la dernière sauvegarde.
+- `manifest.webmanifest` et `icones/` : le site peut être installé sur l'écran d'accueil d'un téléphone ou d'une tablette.
+- Toutes les polices sont dans `polices/` : le site n'appelle aucun service externe.
+- Le pied de page renvoie vers le portail https://stexsnt.github.io/ et les trois autres sites.
